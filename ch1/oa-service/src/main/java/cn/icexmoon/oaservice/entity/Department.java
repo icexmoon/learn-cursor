@@ -4,18 +4,25 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * 
  * @TableName department
  */
-@TableName(value ="department")
-@Data
+@TableName(value = "department")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Department {
     /**
-     * 
+     *
      */
+    @EqualsAndHashCode.Include // 只使用 id 属性生成 equals 和 hashCode 方法
     @TableId(type = IdType.AUTO)
     private Long id;
 
@@ -33,4 +40,14 @@ public class Department {
      * 部门负责人
      */
     private Long userId;
+    /**
+     * 父部门
+     */
+    @TableField(exist = false)
+    private Department parent;
+    /**
+     * 子部门
+     */
+    @TableField(exist = false)
+    private Set<Department> children = new HashSet<>();
 }

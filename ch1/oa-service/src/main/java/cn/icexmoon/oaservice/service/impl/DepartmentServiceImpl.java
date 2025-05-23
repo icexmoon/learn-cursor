@@ -1,5 +1,6 @@
 package cn.icexmoon.oaservice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.icexmoon.oaservice.entity.Department;
 import cn.icexmoon.oaservice.service.DepartmentService;
@@ -15,6 +16,14 @@ import org.springframework.stereotype.Service;
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department>
     implements DepartmentService{
 
+    @Override
+    public Department getRootDept() {
+        Department department = this.getOne(new QueryWrapper<Department>().eq("parent_id", 0L));
+        if (department == null){
+            throw new RuntimeException("系统中没有根部门");
+        }
+        return department;
+    }
 }
 
 

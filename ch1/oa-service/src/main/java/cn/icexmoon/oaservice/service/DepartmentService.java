@@ -10,4 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DepartmentService extends IService<Department> {
 
+    /**
+     * 获取根节点部门（不属于部门树）
+     * @return 根节点部门
+     */
+    Department getRootDept();
 }
