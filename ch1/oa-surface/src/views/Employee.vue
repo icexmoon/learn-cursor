@@ -5,7 +5,7 @@
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="name" label="姓名" />
       <el-table-column prop="phone" label="手机号" />
-      <el-table-column prop="department" label="部门" />
+      <el-table-column prop="deptName" label="部门" />
     </el-table>
     
     <!-- 添加分页组件 -->
