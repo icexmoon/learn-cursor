@@ -50,4 +50,7 @@ public class Department {
      */
     @TableField(exist = false)
     private Set<Department> children = new HashSet<>();
+
+    @TableField(exist = false)
+    private String fullName;
 }

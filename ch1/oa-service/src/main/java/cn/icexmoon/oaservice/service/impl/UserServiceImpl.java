@@ -1,9 +1,12 @@
 package cn.icexmoon.oaservice.service.impl;
 
+import cn.icexmoon.oaservice.dto.UserDTO;
 import cn.icexmoon.oaservice.entity.Department;
+import cn.icexmoon.oaservice.entity.Position;
 import cn.icexmoon.oaservice.entity.User;
 import cn.icexmoon.oaservice.mapper.UserMapper;
 import cn.icexmoon.oaservice.service.DepartmentService;
+import cn.icexmoon.oaservice.service.PositionService;
 import cn.icexmoon.oaservice.service.UserService;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,6 +31,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private PositionService positionService;
 
     @Override
     public User getByPhone(String phone) {
@@ -69,7 +74,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 填充部门名称
         userList.forEach(user -> {
             if (user.getDeptId() != null) {
-                user.setDeptName(departmentMap.get(user.getDeptId()).getName());
+                Department department = departmentMap.get(user.getDeptId());
+                if (department != null) {
+                    user.setDeptName(department.getName());
+                }
             }
         });
     }
@@ -82,7 +90,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return Result.success(pageResult);
         }
         fillDeptName(pageResult.getRecords());
+        fillPosition(pageResult.getRecords());
         return Result.success(pageResult);
+    }
+
+    /**
+     * 填充职位信息
+     *
+     * @param users 用户
+     */
+    private void fillPosition(List<User> users) {
+        // 获取所有职位信息
+        Map<Integer, Position> positionMap = positionService.getPositionMap();
+        for (User user : users) {
+            if (user.getPositionId() != null && positionMap.containsKey(user.getPositionId())) {
+                user.setPosition(positionMap.get(user.getPositionId()));
+            }
+        }
+    }
+
+    @Override
+    public Result<Void> updateUser(UserDTO userDTO) {
+        boolean result = update()
+                .set("name", userDTO.getName())
+                .set("dept_id", userDTO.getDeptId())
+                .set("position_id", userDTO.getPositionId())
+                .eq("id", userDTO.getId())
+                .update();
+        if (result) {
+            return Result.success();
+        }
+        return Result.fail("编辑用户失败");
     }
 }
 

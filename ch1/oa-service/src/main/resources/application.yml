@@ -17,5 +17,8 @@ logging:
     org.springframework.web: DEBUG
     org.apache.tomcat: DEBUG
 mybatis-plus:
+  global-config:
+    db-config:
+      column-format: "`%s`"   # 所有字段自动加反引号
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,14 +1,12 @@
 package cn.icexmoon.oaservice.controller;
 
+import cn.icexmoon.oaservice.dto.UserDTO;
 import cn.icexmoon.oaservice.entity.User;
 import cn.icexmoon.oaservice.service.UserService;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,15 +30,20 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/list")
-    public Result<List<User>> list(){
+    public Result<List<User>> list() {
         List<User> list = userService.list();
         return Result.success(list);
     }
 
     @GetMapping("/pageList")
-    public Result<IPage<User>> pageList(@RequestParam("pageNo") Long pageNo, @RequestParam("pageSize") Long pageSize){
+    public Result<IPage<User>> pageList(@RequestParam("pageNo") Long pageNo, @RequestParam("pageSize") Long pageSize) {
         // 分页查询
         return userService.getPageResult(pageNo, pageSize);
+    }
+
+    @PostMapping("/edit")
+    public Result<Void> update(@RequestBody UserDTO userDTO) {
+        return userService.updateUser(userDTO);
     }
 
 }

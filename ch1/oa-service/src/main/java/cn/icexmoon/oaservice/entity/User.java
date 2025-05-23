@@ -44,4 +44,12 @@ public class User {
      */
     @TableField(exist = false)
     private String DeptName;
+
+    /**
+     * 职位
+     */
+    private Integer positionId;
+
+    @TableField(exist = false)
+    private Position position;
 }

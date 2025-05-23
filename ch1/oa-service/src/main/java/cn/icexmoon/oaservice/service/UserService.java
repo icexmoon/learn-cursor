@@ -1,5 +1,6 @@
 package cn.icexmoon.oaservice.service;
 
+import cn.icexmoon.oaservice.dto.UserDTO;
 import cn.icexmoon.oaservice.entity.User;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,4 +29,6 @@ public interface UserService extends IService<User> {
      * @return 分页信息
      */
     Result<IPage<User>> getPageResult(Long pageNo, Long pageSize);
+
+    Result<Void> updateUser(UserDTO userDTO);
 }
