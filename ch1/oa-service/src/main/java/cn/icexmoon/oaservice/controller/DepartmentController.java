@@ -5,7 +5,6 @@ import cn.icexmoon.oaservice.entity.Department;
 import cn.icexmoon.oaservice.service.DepartmentService;
 import cn.icexmoon.oaservice.util.DeptTree;
 import cn.icexmoon.oaservice.util.Result;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +37,9 @@ public class DepartmentController {
      */
     @GetMapping("/tree")
     @ResponseBody
-    public String getDepartmentTree() {
-        Department rootNode = deptTree.getRootNode(true);
-        Result<Department> success = Result.success(rootNode);
-        return JSON.toJSONString(success);
+    public Result<Department> getDepartmentTree() {
+        Department simpleTree = deptTree.getSimpleTree();
+        return Result.success(simpleTree);
     }
 
     @GetMapping("/pageList")

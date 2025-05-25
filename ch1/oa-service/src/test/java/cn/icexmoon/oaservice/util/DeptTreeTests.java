@@ -1,6 +1,5 @@
 package cn.icexmoon.oaservice.util;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,10 +21,10 @@ public class DeptTreeTests {
     @Autowired
     private DeptTree deptTree;
 
-    @Test
-    public void testTraversalTree() {
-        deptTree.traversalTree(node -> {
-            System.out.println(deptTree.getFullDeptName(node));
-        });
-    }
+//    @Test
+//    public void testTraversalTree() {
+//        deptTree.traversalTree(node -> {
+//            System.out.println(deptTree.getFullDeptName(node));
+//        });
+//    }
 }

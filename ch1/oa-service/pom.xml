@@ -94,6 +94,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>cn.icexmoon</groupId>
+            <artifactId>icexmoon-tree</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,13 +1,14 @@
 package cn.icexmoon.oaservice.entity;
 
+import cn.icexmoon.tree.inter.Nodeable;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @TableName department
@@ -18,7 +19,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Department {
+public class Department implements Nodeable<Department> {
     /**
      *
      */
@@ -49,7 +50,7 @@ public class Department {
      * 子部门
      */
     @TableField(exist = false)
-    private Set<Department> children = new HashSet<>();
+    private List<Department> children = new ArrayList<>();
 
     @TableField(exist = false)
     private String fullName;

@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department>
         implements DepartmentService {
+    @Lazy
     @Autowired
     private DeptTree deptTree;
     @Autowired
