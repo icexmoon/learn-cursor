@@ -8,9 +8,9 @@ import lombok.*;
 /**
  * 职位表
  *
- * @TableName my_position
+ * @TableName position
  */
-@TableName(value = "my_position")
+@TableName(value = "position")
 @Getter
 @Setter
 @RequiredArgsConstructor
