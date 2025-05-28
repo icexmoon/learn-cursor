@@ -4,7 +4,7 @@
     <el-header class="header">
       <div class="logo">员工管理系统</div>
       <div class="user-info">
-        <el-avatar icon="el-icon-user" />
+        <font-awesome-icon :icon="['fas', 'user']" />
         <span class="username">张三</span>
         <el-link type="danger" @click="logout">退出</el-link>
       </div>
@@ -12,73 +12,29 @@
     <el-container>
       <!-- 侧边栏 -->
       <el-aside width="220px" class="aside">
-        <el-menu :default-openeds="['org', 'office', 'sys']" router>
-          <el-menu-item index="/">
-            <el-icon>
-              <House />
-            </el-icon>
-            <span>首页</span>
-          </el-menu-item>
-          <el-sub-menu index="org">
-            <template #title>
-              <el-icon>
-                <UserFilled />
-              </el-icon>
-              <span>组织架构</span>
-            </template>
-            <el-menu-item index="/employee">
-              <el-icon>
-                <User />
-              </el-icon>
-              <span>员工管理</span>
+        <el-menu :default-openeds="defaultOpeneds" router>
+          <template v-for="menu in menuTree" :key="menu.id">
+            <!-- 没有子菜单的情况 -->
+            <el-menu-item v-if="!menu.children || menu.children.length === 0" :index="menu.path || '/developing'">
+              <font-awesome-icon :icon="getMenuIcon(menu)" />
+              <span>{{ menu.name }}</span>
             </el-menu-item>
-            <el-menu-item index="/department">
-              <el-icon>
-                <OfficeBuilding />
-              </el-icon>
-              <span>部门管理</span>
-            </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="office">
-            <template #title>
-              <el-icon>
-                <Document />
-              </el-icon>
-              <span>日常办公</span>
-            </template>
-            <el-menu-item index="/apply">
-              <el-icon>
-                <Edit />
-              </el-icon>
-              <span>提交申请</span>
-            </el-menu-item>
-            <el-menu-item index="/todo">
-              <el-icon>
-                <List />
-              </el-icon>
-              <span>审批待办</span>
-            </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="sys">
-            <template #title>
-              <el-icon>
-                <Setting />
-              </el-icon>
-              <span>系统管理</span>
-            </template>
-            <el-menu-item index="/menu">
-              <el-icon>
-                <Menu />
-              </el-icon>
-              <span>菜单管理</span>
-            </el-menu-item>
-            <el-menu-item index="/perm">
-              <el-icon>
-                <Lock />
-              </el-icon>
-              <span>权限管理</span>
-            </el-menu-item>
-          </el-sub-menu>
+            <!-- 有子菜单的情况 -->
+            <el-sub-menu v-else :index="menu.id.toString()">
+              <template #title>
+                <font-awesome-icon :icon="getMenuIcon(menu)" />
+                <span>{{ menu.name }}</span>
+              </template>
+              <el-menu-item 
+                v-for="subMenu in menu.children" 
+                :key="subMenu.id"
+                :index="subMenu.path || '/developing'"
+              >
+                <font-awesome-icon :icon="getMenuIcon(subMenu)" />
+                <span>{{ subMenu.name }}</span>
+              </el-menu-item>
+            </el-sub-menu>
+          </template>
         </el-menu>
       </el-aside>
       <!-- 内容区 -->
@@ -96,10 +52,51 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { House, UserFilled, User, OfficeBuilding, Document, Edit, List, Setting, Menu, Lock } from '@element-plus/icons-vue'
 import request from '@/util/request'
+
 const router = useRouter()
+const menuTree = ref([])
+const defaultOpeneds = ref([])
+
+const menuIconMap = {
+  '1': 'home',
+  '2': 'users',
+  '3': 'user',
+  '4': 'cog',
+  '5': 'lock',
+  '6': 'bars',
+  '7': 'calendar',
+  '8': 'check',
+  '9': 'file-alt',
+  '10': 'plug'
+}
+
+// 获取菜单图标
+const getMenuIcon = (menu) => {
+  // 如果菜单有自定义图标，则使用自定义图标
+  if (menu.icon) {
+    return ['fas', menu.icon.toLowerCase()]
+  }
+  // 否则使用默认图标
+  return ['fas', 'bars']
+}
+
+// 获取菜单数据
+const fetchMenuTree = async () => {
+  try {
+    const response = await request.get('/api/menu/tree')
+    if (response.success) {
+      menuTree.value = response.data.children || []
+      // 设置默认展开的菜单
+      defaultOpeneds.value = menuTree.value.map(menu => menu.id.toString())
+    }
+  } catch (error) {
+    console.error('获取菜单数据失败', error)
+  }
+}
+
 const logout = () => {
   // 调用后端退出登录接口
   request.post('/api/logout').then(resp => {
@@ -112,6 +109,11 @@ const logout = () => {
     console.log("退出失败", error)
   })
 }
+
+// 组件挂载时获取菜单数据
+onMounted(() => {
+  fetchMenuTree()
+})
 </script>
 
 <style scoped>

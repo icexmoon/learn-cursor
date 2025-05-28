@@ -8,6 +8,8 @@ import Welcome from '../views/Welcome.vue'
 import Apply from '../views/Apply.vue'
 import Todo from '../views/Todo.vue'
 import Perm from '../views/Perm.vue'
+import Developing from '../views/Developing.vue'
+import Interface from '../views/Interface.vue'
 
 const routes = [
   { path: '/login', component: Login },
@@ -21,7 +23,9 @@ const routes = [
       { path: 'menu', component: Menu },
       { path: 'apply', component: Apply },
       { path: 'todo', component: Todo },
-      { path: 'perm', component: Perm }
+      { path: 'perm', component: Perm },
+      { path: 'interface', component: Interface },
+      { path: 'developing', component: Developing }
     ]
   }
 ]
