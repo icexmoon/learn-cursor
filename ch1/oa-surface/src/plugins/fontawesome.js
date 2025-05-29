@@ -22,7 +22,8 @@ import {
   faQuestionCircle,
   faPlug,
   faSearch,
-  faMinus
+  faMinus,
+  faUserShield
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -47,7 +48,8 @@ library.add(
   faQuestionCircle,
   faPlug,
   faSearch,
-  faMinus
+  faMinus,
+  faUserShield
 )
 
 export default FontAwesomeIcon 

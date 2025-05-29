@@ -90,7 +90,8 @@ const employeeForm = ref({
   id: null,
   name: '',
   deptIds: null,
-  positionId: null
+  positionId: null,
+  roleId: null
 })
 
 // 获取员工列表数据
@@ -150,7 +151,8 @@ const handleEdit = (row) => {
     id: row.id,
     name: row.name,
     deptIds: row.deptId,
-    positionId: row.positionId
+    positionId: row.positionId,
+    roleId: row.roleId
   }
   dialogVisible.value = true
 }
@@ -159,6 +161,7 @@ const handleEdit = (row) => {
 const submitForm = async () => {
   try {
     // 处理部门id，取选中的最后一个部门
+    console.log(employeeForm.value.deptIds)
     employeeForm.value.deptId = employeeForm.value.deptIds.at(-1)
     const response = await request.post('/api/user/edit', employeeForm.value)
     if (response.success) {

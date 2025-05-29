@@ -27,7 +27,8 @@ const routes = [
       { path: 'perm', component: Perm },
       { path: 'interface', component: Interface },
       { path: 'developing', component: Developing },
-      { path: 'role', component: Role }
+      { path: 'role', component: Role },
+      { path: 'permission', component: Perm }
     ]
   }
 ]
