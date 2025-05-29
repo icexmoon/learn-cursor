@@ -10,6 +10,7 @@ import Todo from '../views/Todo.vue'
 import Perm from '../views/Perm.vue'
 import Developing from '../views/Developing.vue'
 import Interface from '../views/Interface.vue'
+import Role from '../views/Role.vue'
 
 const routes = [
   { path: '/login', component: Login },
@@ -25,7 +26,8 @@ const routes = [
       { path: 'todo', component: Todo },
       { path: 'perm', component: Perm },
       { path: 'interface', component: Interface },
-      { path: 'developing', component: Developing }
+      { path: 'developing', component: Developing },
+      { path: 'role', component: Role }
     ]
   }
 ]
