@@ -36,11 +36,15 @@ public class Result<T> {
     }
 
 
-    public static Result<Void> success(){
+    public static Result<Void> success() {
         return success(null);
     }
 
     public static Result<Void> fail(String message) {
         return new Result<>(false, message, null);
+    }
+
+    public static <T> Result<T> fail(T data, String message) {
+        return new Result<>(false, message, data);
     }
 }
