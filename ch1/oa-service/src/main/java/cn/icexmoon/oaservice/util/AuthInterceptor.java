@@ -59,7 +59,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // 5. 如果 token 有效，继续执行后续逻辑
         // 查询用户信息
-        User user = userService.getById(uid);
+        User user = userService.getUserById(uid);
         if (user == null) {
             // 查不到对应的用户信息，视作登录失效
             setLoginErrorResponse(response, "长时间未操作，登录状态已失效，请重新登录！");

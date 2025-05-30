@@ -46,4 +46,8 @@ public class UserController {
         return userService.updateUser(userDTO);
     }
 
+    @GetMapping("/search")
+    public Result<List<User>> search(@RequestParam String keyword) {
+        return userService.search(keyword);
+    }
 }

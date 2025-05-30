@@ -1,6 +1,7 @@
 package cn.icexmoon.oaservice.config;
 
 import cn.icexmoon.oaservice.util.AuthInterceptor;
+import cn.icexmoon.oaservice.util.PermissionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private AuthInterceptor authInterceptor;
+    @Autowired
+    private PermissionInterceptor permissionInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -31,5 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**") // 拦截所有路径
                 .excludePathPatterns("/login",
                         "/login/sendCode/*"); // 排除登录和注册接口
+        registry.addInterceptor(permissionInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login","/login/sendCode/*","/logout");
     }
 }

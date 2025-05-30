@@ -17,6 +17,9 @@ import java.util.List;
 @TableName(value = "role", autoResultMap = true)
 @Data
 public class Role {
+    public static final String ROLE_GUEST = "guest";
+    // 特殊的硬编码角色
+    public static final String ROLE_ROOT = "root";
     /**
      * 菜单权限
      */

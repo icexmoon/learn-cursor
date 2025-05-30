@@ -1,6 +1,7 @@
 package cn.icexmoon.oaservice.service.impl;
 
 import cn.icexmoon.oaservice.util.Result;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +11,8 @@ import cn.icexmoon.oaservice.mapper.InterfaceMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 70748
@@ -19,6 +22,14 @@ import java.util.List;
 @Service
 public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface>
         implements InterfaceService {
+
+    @Override
+    public List<Interface> match(String requestURI, String method) {
+        QueryWrapper<Interface> queryWrapper = new QueryWrapper<>();
+        queryWrapper.likeRight("path", requestURI)
+                .eq("method", method);
+        return this.list(queryWrapper);
+    }
 
     @Override
     public Result<IPage<Interface>> pagedInterfaces(Integer pageNum, Integer pageSize) {
@@ -56,6 +67,11 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface
                 .like("path", keyWord)
                 .list();
         return Result.success(list);
+    }
+
+    @Override
+    public Map<Integer, Interface> getInterfaceMap() {
+        return this.list().stream().collect(Collectors.toMap(Interface::getId, i -> i));
     }
 }
 

@@ -4,6 +4,7 @@ import cn.icexmoon.oaservice.dto.RoleMenuPermitDTO;
 import cn.icexmoon.oaservice.entity.Role;
 import cn.icexmoon.oaservice.service.RoleService;
 import cn.icexmoon.oaservice.util.Result;
+import cn.icexmoon.oaservice.util.RoleCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +28,13 @@ import java.util.List;
 public class RoleController {
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleCache roleCache;
 
     @GetMapping("/list")
     public Result<List<Role>> list() {
-        List<Role> list = roleService.list();
-        return Result.success(list);
+        List<Role> roles = roleCache.getRoles();
+        return Result.success(roles);
     }
 
     @PostMapping("/add")

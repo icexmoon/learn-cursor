@@ -71,6 +71,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
         menuTree.destroy();
         return Result.success(null, "更新菜单成功");
     }
+
+    @Override
+    public boolean isParent(Integer parentMenuId, Integer childMenuId) {
+        return menuTree.isParent(parentMenuId,childMenuId);
+    }
 }
 
 

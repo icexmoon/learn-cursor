@@ -3,10 +3,12 @@ package cn.icexmoon.oaservice.service;
 import cn.icexmoon.oaservice.dto.BindInterfaceDTO;
 import cn.icexmoon.oaservice.entity.Interface;
 import cn.icexmoon.oaservice.entity.MenuInterface;
+import cn.icexmoon.oaservice.entity.Role;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 70748
@@ -28,4 +30,6 @@ public interface MenuInterfaceService extends IService<MenuInterface> {
      * @return 已绑定的接口
      */
     Result<List<Interface>> binded(Integer menuId);
+
+    boolean hasPermission(Interface inter, Map<Integer, Role.MenuPermission> multiRoleMenuPermissions);
 }

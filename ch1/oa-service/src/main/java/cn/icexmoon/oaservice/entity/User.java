@@ -4,17 +4,38 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
+import java.util.List;
+
 /**
- * 
  * @TableName user
  */
-@TableName(value ="user")
+@TableName(value = "user", autoResultMap = true)
 @Data
 public class User {
+//    public static class roleIdsTypeHandler extends JacksonTypeHandler {
+//
+//        public roleIdsTypeHandler(Class<?> type) {
+//            super(type);
+//        }
+//
+//        public roleIdsTypeHandler(Class<?> type, Field field) {
+//            super(type, field);
+//        }
+//
+//        @Override
+//        public String toJson(Object obj) {
+//            if (obj == null) {
+//                return null;
+//            }
+//            return super.toJson(obj);
+//        }
+//    }
+
     /**
-     * 
+     *
      */
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -52,4 +73,13 @@ public class User {
 
     @TableField(exist = false)
     private Position position;
+
+    /**
+     * 角色 id 集合
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<Integer> roleIds;
+
+    @TableField(exist = false)
+    private List<Role> roles;
 }

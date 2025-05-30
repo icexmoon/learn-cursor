@@ -1,22 +1,23 @@
 package cn.icexmoon.oaservice.service.impl;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.icexmoon.oaservice.dto.BindInterfaceDTO;
 import cn.icexmoon.oaservice.entity.Interface;
 import cn.icexmoon.oaservice.entity.MenuInterface;
+import cn.icexmoon.oaservice.entity.Role;
 import cn.icexmoon.oaservice.mapper.MenuInterfaceMapper;
 import cn.icexmoon.oaservice.service.InterfaceService;
 import cn.icexmoon.oaservice.service.MenuInterfaceService;
+import cn.icexmoon.oaservice.service.MenuService;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +30,8 @@ public class MenuInterfaceServiceImpl extends ServiceImpl<MenuInterfaceMapper, M
         implements MenuInterfaceService {
     @Autowired
     private InterfaceService interfaceService;
+    @Autowired
+    private MenuService menuService;
 
     @Override
     @Transactional
@@ -66,13 +69,53 @@ public class MenuInterfaceServiceImpl extends ServiceImpl<MenuInterfaceMapper, M
     @Override
     public Result<List<Interface>> binded(Integer menuId) {
         List<MenuInterface> menuInterfaces = this.list(new QueryWrapper<MenuInterface>().eq("menu_id", menuId));
-        Set<Integer> ids = menuInterfaces.stream().map(mi -> mi.getInterfaceId()).collect(Collectors.toSet());
+        Set<Integer> ids = menuInterfaces.stream().map(MenuInterface::getInterfaceId).collect(Collectors.toSet());
         if (ids.isEmpty()) {
             return Result.success(Collections.emptyList());
         }
         List<Interface> interfaces = interfaceService.listByIds(ids);
         return Result.success(interfaces);
     }
+
+    @Override
+    public boolean hasPermission(@NonNull Interface inter, @NonNull Map<Integer, Role.MenuPermission> multiRoleMenuPermissions) {
+        // 获取接口绑定的菜单
+        List<MenuInterface> menuInterfaces = this.list(new QueryWrapper<MenuInterface>().eq("interface_id", inter.getId()));
+        List<Integer> menuIds = menuInterfaces.stream().map(MenuInterface::getMenuId).toList();
+        for (Integer bindMenuId : menuIds) {
+            // 判断角色菜单权限中的菜单是否为接口关联菜单的父菜单
+            for(Map.Entry<Integer, Role.MenuPermission> entry : multiRoleMenuPermissions.entrySet()) {
+                Integer menuId = entry.getKey();
+                Role.MenuPermission menuPermission = entry.getValue();
+                if (Objects.equals(menuId, bindMenuId) || menuService.isParent(menuId, bindMenuId)) {
+                    if (this.checkMenuPermission(menuPermission,inter)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkMenuPermission(Role.MenuPermission menuPermission, Interface inter) {
+        if (BooleanUtil.isTrue(inter.getModeView()) && !BooleanUtil.isTrue(menuPermission.getView())){
+            return false;
+        }
+        else if (BooleanUtil.isTrue(inter.getModeEdit()) && !BooleanUtil.isTrue(menuPermission.getEdit())){
+            return false;
+        }
+        else if (BooleanUtil.isTrue(inter.getModeDel()) && !BooleanUtil.isTrue(menuPermission.getDelete())){
+            return false;
+        }
+        else if (BooleanUtil.isTrue(inter.getModeAdd()) && !BooleanUtil.isTrue(menuPermission.getAdd())){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+
 }
 
 

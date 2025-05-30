@@ -95,4 +95,15 @@ public class MenuTree {
         }
         return ids;
     }
+
+    public boolean isParent(Integer parentMenuId, Integer childMenuId) {
+        Node<Menu> parentNode = this.findNode(parentMenuId);
+        Node<Menu> childNode = this.findNode(childMenuId);
+        List<Node<Menu>> allParents = tree.getAllParents(childNode);
+        return allParents.contains(parentNode);
+    }
+
+    private Node<Menu> findNode(@NonNull Integer menuId) {
+        return this.getTree().findNode(n -> menuId.equals(n.getValue().getId()));
+    }
 }

@@ -39,4 +39,12 @@ public interface MenuService extends IService<Menu> {
      * @return 成功/失败
      */
     Result<Void> edit(MenuDTO menu);
+
+    /**
+     * 判断一个菜单是否为另一个菜单的父菜单
+     * @param parentMenuId 父菜单 id
+     * @param childMenuId 子菜单 id
+     * @return 是否
+     */
+    boolean isParent(Integer parentMenuId, Integer childMenuId);
 }
