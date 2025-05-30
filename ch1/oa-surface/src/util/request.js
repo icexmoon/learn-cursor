@@ -39,6 +39,9 @@ instance.interceptors.response.use(
             // 用 element-plus 弹窗展示错误信息
             ElMessage.error(error.response.data.message)
         }
+        else if(error.response.status === 403){
+            ElMessage.error(error.response.data.message)
+        }
         // 如果响应是401，则清除本地存储的token
         else if (error.response.status === 401) {
             localStorage.removeItem('token')
