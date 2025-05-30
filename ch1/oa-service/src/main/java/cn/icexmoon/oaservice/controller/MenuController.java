@@ -68,7 +68,7 @@ public class MenuController {
 
     /**
      * 获取菜单列表
-     * @return
+     * @return 菜单列表
      */
     @GetMapping("/page")
     public Result<IPage<Menu>> page(@RequestParam Integer pageNum, @RequestParam Integer pageSize ) {

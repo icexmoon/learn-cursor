@@ -211,14 +211,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (isRole(currentUser, roleService.getRoleByKey(Role.ROLE_ROOT))) {
             return true;
         }
-        // 如果用户没有任何角色，授予一个访客角色
-        if (currentUser.getRoles() == null || currentUser.getRoles().isEmpty()) {
-            currentUser.setRoles(List.of(roleService.getRoleByKey(Role.ROLE_GUEST)));
-        }
-        // 获取当前用户能拥有的权限菜单
-        // 获取用户拥有的角色的菜单权限
-        Map<Integer, Role.MenuPermission> multiRoleMenuPermissions = roleService.getMultiRoleMenuPermissions(currentUser.getRoles());
-        if (multiRoleMenuPermissions.isEmpty()) {
+        Map<Integer, Role.MenuPermission> multiRoleMenuPermissions = getRoleMenuPermissions();
+        if (multiRoleMenuPermissions == null || multiRoleMenuPermissions.isEmpty()) {
             return false;
         }
         // 匹配符合条件的接口
@@ -229,6 +223,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
         }
         return false;
+    }
+
+
+    @Override
+    public Map<Integer, Role.MenuPermission> getRoleMenuPermissions() {
+        User currentUser = UserHolder.getUser();
+        // 如果用户没有任何角色，授予一个访客角色
+        if (currentUser.getRoles() == null || currentUser.getRoles().isEmpty()) {
+            currentUser.setRoles(List.of(roleService.getRoleByKey(Role.ROLE_GUEST)));
+        }
+        // 获取用户拥有的角色的菜单权限
+        Map<Integer, Role.MenuPermission> multiRoleMenuPermissions = roleService.getMultiRoleMenuPermissions(currentUser.getRoles());
+        return multiRoleMenuPermissions;
     }
 
     @Override

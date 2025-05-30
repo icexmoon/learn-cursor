@@ -2,12 +2,14 @@ package cn.icexmoon.oaservice.service;
 
 import cn.icexmoon.oaservice.dto.UserDTO;
 import cn.icexmoon.oaservice.dto.UserRolesDTO;
+import cn.icexmoon.oaservice.entity.Role;
 import cn.icexmoon.oaservice.entity.User;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 70748
@@ -65,6 +67,12 @@ public interface UserService extends IService<User> {
      * @return 是否
      */
     boolean hasPermission(String requestURI, String method);
+
+    /**
+     * 获取当前用户拥有的菜单权限
+     * @return 菜单权限集合
+     */
+    Map<Integer, Role.MenuPermission> getRoleMenuPermissions();
 
     /**
      * 返回用户信息（带角色信息）

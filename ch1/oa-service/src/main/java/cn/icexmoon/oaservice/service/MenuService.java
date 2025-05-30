@@ -13,6 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface MenuService extends IService<Menu> {
 
+    /**
+     * 返回菜单树（只显示当前用户可以访问的）
+     * @return
+     */
     Menu getTree();
 
     Result<?> add(Menu menu);
