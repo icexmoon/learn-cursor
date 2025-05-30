@@ -160,9 +160,11 @@ const handleEdit = (row) => {
 // 提交表单
 const submitForm = async () => {
   try {
-    // 处理部门id，取选中的最后一个部门
-    console.log(employeeForm.value.deptIds)
-    employeeForm.value.deptId = employeeForm.value.deptIds.at(-1)
+    // 处理部门id，确保它是一个数组
+    const deptIds = Array.isArray(employeeForm.value.deptIds) 
+      ? employeeForm.value.deptIds 
+      : [employeeForm.value.deptIds];
+    employeeForm.value.deptId = deptIds[deptIds.length - 1];
     const response = await request.post('/api/user/edit', employeeForm.value)
     if (response.success) {
       ElMessage.success('更新成功')
