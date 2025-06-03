@@ -41,6 +41,26 @@ insert  into `department`(`id`,`name`,`parent_id`,`user_id`) values
 (14,'web开发组',11,NULL),
 (15,'搜索开发组',11,NULL);
 
+/*Table structure for table `dept_virtual_user` */
+
+DROP TABLE IF EXISTS `dept_virtual_user`;
+
+CREATE TABLE `dept_virtual_user` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `dept_id` bigint unsigned NOT NULL COMMENT '部门id',
+  `user_id` bigint unsigned NOT NULL COMMENT '员工id',
+  `position_id` int unsigned NOT NULL COMMENT '职位id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dept_user_idx` (`dept_id`,`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='部门虚拟员工表';
+
+/*Data for the table `dept_virtual_user` */
+
+insert  into `dept_virtual_user`(`id`,`dept_id`,`user_id`,`position_id`) values 
+(5,1,1,3),
+(6,13,405,1),
+(7,13,1,1);
+
 /*Table structure for table `interface` */
 
 DROP TABLE IF EXISTS `interface`;
@@ -182,18 +202,18 @@ CREATE TABLE `user` (
   `name` varchar(45) DEFAULT NULL COMMENT '姓名',
   `phone` varchar(12) NOT NULL COMMENT '手机号',
   `dept_id` bigint DEFAULT NULL COMMENT '所属部门',
-  `ex_depts` varchar(255) DEFAULT NULL COMMENT '兼职部门',
   `position_id` int DEFAULT NULL COMMENT '职位',
   `role_ids` text COMMENT '角色id数组',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=406 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
-insert  into `user`(`id`,`name`,`phone`,`dept_id`,`ex_depts`,`position_id`,`role_ids`) values 
-(1,'超级管理员','15651001234',10,NULL,3,'[1,11,3]'),
-(2,'普通员工','11355012849',5,NULL,6,'[2]'),
-(3,'11','08680832353',13,NULL,5,NULL);
+insert  into `user`(`id`,`name`,`phone`,`dept_id`,`position_id`,`role_ids`) values 
+(1,'超级管理员','15651001234',10,3,'[1,11,3]'),
+(2,'普通员工','11355012849',5,6,'[2]'),
+(3,'11','08680832353',13,5,NULL),
+(405,NULL,'15651007707',NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
