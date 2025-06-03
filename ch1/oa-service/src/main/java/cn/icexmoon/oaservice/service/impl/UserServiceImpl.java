@@ -174,12 +174,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Result<List<User>> search(String keyword) {
+    public Result<List<User>> searchNoRoles(String keyword) {
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.isNull("role_ids")
                 .and(q -> q.like("name", keyword)
                         .or()
                         .like("phone", keyword));
+        List<User> list = this.list(qw);
+        return Result.success(list);
+    }
+
+    @Override
+    public Result<List<User>> search(String keyword) {
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.like("name", keyword)
+                .or()
+                .like("phone", keyword);
         List<User> list = this.list(qw);
         return Result.success(list);
     }

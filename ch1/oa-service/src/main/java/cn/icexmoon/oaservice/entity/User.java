@@ -15,25 +15,6 @@ import java.util.List;
 @TableName(value = "user", autoResultMap = true)
 @Data
 public class User {
-//    public static class roleIdsTypeHandler extends JacksonTypeHandler {
-//
-//        public roleIdsTypeHandler(Class<?> type) {
-//            super(type);
-//        }
-//
-//        public roleIdsTypeHandler(Class<?> type, Field field) {
-//            super(type, field);
-//        }
-//
-//        @Override
-//        public String toJson(Object obj) {
-//            if (obj == null) {
-//                return null;
-//            }
-//            return super.toJson(obj);
-//        }
-//    }
-
     /**
      *
      */
@@ -56,9 +37,9 @@ public class User {
     private Long deptId;
 
     /**
-     * 兼职部门
+     * 兼职部门虚拟
      */
-    private String exDepts;
+//    private String exDepts;
 
     /**
      * 部门名称

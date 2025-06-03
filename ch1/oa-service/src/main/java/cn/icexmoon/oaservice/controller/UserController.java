@@ -1,5 +1,6 @@
 package cn.icexmoon.oaservice.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.icexmoon.oaservice.dto.UserDTO;
 import cn.icexmoon.oaservice.entity.User;
 import cn.icexmoon.oaservice.service.UserService;
@@ -47,7 +48,13 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public Result<List<User>> search(@RequestParam String keyword) {
-        return userService.search(keyword);
+    public Result<List<User>> search(@RequestParam String keyword, @RequestParam(required = false) String type) {
+        if (StrUtil.isEmpty(type)) {
+            return userService.searchNoRoles(keyword);
+        } else if ("all".equals(type)) {
+            return userService.search(keyword);
+        } else {
+            return userService.searchNoRoles(keyword);
+        }
     }
 }

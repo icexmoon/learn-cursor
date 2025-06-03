@@ -54,6 +54,13 @@ public interface UserService extends IService<User> {
     Result<IPage<User>> specialUserPage(Long current, Long size);
 
     /**
+     * 按名称或手机号查询特殊用户（没有设置过角色的）
+     * @param keyword 用户名或手机号
+     * @return 符合结果的用户集合
+     */
+    Result<List<User>> searchNoRoles(String keyword);
+
+    /**
      * 按名称或手机号查询特殊用户
      * @param keyword 用户名或手机号
      * @return 符合结果的用户集合

@@ -5,6 +5,7 @@ import cn.icexmoon.oaservice.dto.DepartmentDTO;
 import cn.icexmoon.oaservice.entity.Department;
 import cn.icexmoon.oaservice.mapper.DepartmentMapper;
 import cn.icexmoon.oaservice.service.DepartmentService;
+import cn.icexmoon.oaservice.service.DeptVirtualUserService;
 import cn.icexmoon.oaservice.util.DeptTree;
 import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -32,6 +34,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private DeptTree deptTree;
     @Autowired
     private BeanFactory beanFactory;
+    @Autowired
+    private DeptVirtualUserService deptVirtualUserService;
 
     @Override
     public Department getRootDept() {
@@ -53,6 +57,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     }
 
     @Override
+    @Transactional
     public boolean cascadeDelete(Long id) {
         // 获取部门的所有子部门
         Set<Long> allSubDeptIds = deptTree.getAllSubDeptIds(id);
@@ -60,6 +65,10 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         // 删除部门和子部门
         DepartmentService departmentService = beanFactory.getBean(DepartmentService.class);
         boolean result = departmentService.removeBatchByIds(allSubDeptIds);
+        if (result){
+            // 级联删除部门虚拟员工表
+            deptVirtualUserService.removeByDeptIds(allSubDeptIds);
+        }
         // 销毁部门树
         deptTree.destroy();
         return result;
@@ -82,6 +91,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         deptTree.destroy();
         return Result.success(department.getId(), "添加部门成功");
     }
+
 }
 
 
