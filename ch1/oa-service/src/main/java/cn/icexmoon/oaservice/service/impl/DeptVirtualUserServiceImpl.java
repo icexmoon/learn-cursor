@@ -14,6 +14,7 @@ import cn.icexmoon.oaservice.util.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class DeptVirtualUserServiceImpl extends ServiceImpl<DeptVirtualUserMapper, DeptVirtualUser>
         implements DeptVirtualUserService {
+    @Lazy
     @Autowired
     private UserService userService;
     @Autowired
