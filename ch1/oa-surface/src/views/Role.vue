@@ -76,6 +76,7 @@
 import { ref, onMounted, nextTick } from 'vue'
 import request from '@/util/request'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { inject } from 'vue';
 
 const tableData = ref([])
 const dialogVisible = ref(false)
@@ -320,7 +321,7 @@ const collectMenuPermissions = (nodes) => {
     collect(nodes)
     return permissions
 }
-
+const updateSysMenu = inject('updateMenuTree')
 // 提交权限设置
 const submitPermissions = async () => {
     try {
@@ -335,6 +336,8 @@ const submitPermissions = async () => {
             permissionDialogVisible.value = false
             // 刷新角色列表
             fetchRoleList()
+            // 更新菜单
+            updateSysMenu()
         } else {
             ElMessage.error(response.message || '权限设置失败')
         }

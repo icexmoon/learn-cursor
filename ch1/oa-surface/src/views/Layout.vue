@@ -25,11 +25,7 @@
                 <font-awesome-icon :icon="getMenuIcon(menu)" />
                 <span>{{ menu.name }}</span>
               </template>
-              <el-menu-item 
-                v-for="subMenu in menu.children" 
-                :key="subMenu.id"
-                :index="subMenu.path || '/developing'"
-              >
+              <el-menu-item v-for="subMenu in menu.children" :key="subMenu.id" :index="subMenu.path || '/developing'">
                 <font-awesome-icon :icon="getMenuIcon(subMenu)" />
                 <span>{{ subMenu.name }}</span>
               </el-menu-item>
@@ -52,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import { useRouter } from 'vue-router'
 import request from '@/util/request'
 
@@ -60,18 +56,6 @@ const router = useRouter()
 const menuTree = ref([])
 const defaultOpeneds = ref([])
 
-const menuIconMap = {
-  '1': 'home',
-  '2': 'users',
-  '3': 'user',
-  '4': 'cog',
-  '5': 'lock',
-  '6': 'bars',
-  '7': 'calendar',
-  '8': 'check',
-  '9': 'file-alt',
-  '10': 'plug'
-}
 
 // 获取菜单图标
 const getMenuIcon = (menu) => {
@@ -86,7 +70,7 @@ const getMenuIcon = (menu) => {
 // 获取菜单数据
 const fetchMenuTree = async () => {
   try {
-    const response = await request.get('/api/menu/tree')
+    const response = await request.get('/api/menu/tree?checkPermission=true')
     if (response.success) {
       menuTree.value = response.data.children || []
       // 设置默认展开的菜单
@@ -96,6 +80,9 @@ const fetchMenuTree = async () => {
     console.error('获取菜单数据失败', error)
   }
 }
+
+// 注册菜单更新方法
+provide('updateMenuTree', fetchMenuTree)
 
 const logout = () => {
   // 调用后端退出登录接口

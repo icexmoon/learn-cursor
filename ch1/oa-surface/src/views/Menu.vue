@@ -159,10 +159,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import request from '@/util/request'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
+const updateSysMenu = inject('updateMenuTree')
 const tableData = ref([])
 const menuTree = ref([])
 const defaultProps = {
@@ -290,6 +290,8 @@ const handleDelete = (node, data) => {
         // 刷新数据
         fetchMenuTree()
         fetchMenuList()
+        // 更新菜单
+        updateSysMenu()
       } else {
         ElMessage.error(response.message || '删除失败')
       }
@@ -320,6 +322,7 @@ const submitForm = async () => {
       // 刷新数据
       fetchMenuTree()
       fetchMenuList()
+      updateSysMenu()
     } else {
       ElMessage.error(response.message || (dialogType.value === 'add' ? '添加失败' : '更新失败'))
     }
