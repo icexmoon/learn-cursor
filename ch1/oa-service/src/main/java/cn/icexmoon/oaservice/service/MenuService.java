@@ -14,10 +14,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface MenuService extends IService<Menu> {
 
     /**
-     * 返回菜单树（只显示当前用户可以访问的）
-     * @return
+     * 返回菜单树
+     *
+     * @param checkPermission 是否根据用户访问权限返回菜单树
+     * @return 菜单树
      */
-    Menu getTree();
+    Menu getTree(Boolean checkPermission);
 
     Result<?> add(Menu menu);
 
@@ -39,6 +41,7 @@ public interface MenuService extends IService<Menu> {
 
     /**
      * 修改菜单
+     *
      * @param menu 菜单基本信息
      * @return 成功/失败
      */
@@ -46,8 +49,9 @@ public interface MenuService extends IService<Menu> {
 
     /**
      * 判断一个菜单是否为另一个菜单的父菜单
+     *
      * @param parentMenuId 父菜单 id
-     * @param childMenuId 子菜单 id
+     * @param childMenuId  子菜单 id
      * @return 是否
      */
     boolean isParent(Integer parentMenuId, Integer childMenuId);

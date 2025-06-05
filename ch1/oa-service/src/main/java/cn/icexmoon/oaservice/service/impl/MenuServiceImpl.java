@@ -1,6 +1,7 @@
 package cn.icexmoon.oaservice.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.icexmoon.oaservice.dto.MenuDTO;
 import cn.icexmoon.oaservice.entity.Menu;
 import cn.icexmoon.oaservice.entity.Role;
@@ -34,9 +35,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
     private UserService userService;
 
     @Override
-    public Menu getTree() {
+    public Menu getTree(Boolean checkPermission) {
         Menu simpleTreeCopy = TreeUtil.getSimpleTreeCopy(menuTree.getTree(), Menu.class, false);
         // 删除掉没有权限的菜单
+        if (!BooleanUtil.isTrue(checkPermission)){
+            return simpleTreeCopy;
+        }
         // 遍历树
         Menu permissionMenu = BeanUtil.copyProperties(simpleTreeCopy, Menu.class, "parent", "children");
         Map<Integer, Role.MenuPermission> roleMenuPermissions = userService.getRoleMenuPermissions();
